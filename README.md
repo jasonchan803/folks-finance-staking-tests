@@ -25,6 +25,17 @@ The original protocol implementation belongs to Folks Finance. I modified and ex
 - Foundry
 - Forge
 
+## License and Attribution
+
+The original Folks Finance Staking smart contract code is licensed under the Business Source License 1.1 (BSL 1.1).
+
+Original repository:  
+https://github.com/Folks-Finance/folks-staking-contracts
+
+The original protocol implementation and related intellectual property belong to FOLKS FINANCE PRIVATE FOUNDATION.
+
+This repository contains independent testing work based on the original codebase. The original license terms remain applicable to the original and modified project code. Please refer to `LICENSE.md` for the full license terms.
+
 ## Disclaimer
 
 This is an independent security testing and learning project. It is not an official security audit or an official contribution to Folks Finance.
