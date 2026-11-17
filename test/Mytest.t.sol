@@ -104,7 +104,7 @@ contract Mytest is Test {
         assertEq(staking.getClaimable(alice, periodIndex), initialamount);
     }
 
-    function test_exploit_revokePermitBlockedAfterMigratorRoleRevoked() public {
+    function test_canRevokeMigrationPermitAfterMigratorRoleRevoked() public {
         deal(address(token), address(staking), 1000 ether);
         deal(address(token), alice, 100 ether);
 
@@ -121,21 +121,21 @@ contract Mytest is Test {
         staking.revokeRole(keccak256("MIGRATOR"), migrator);
 
         vm.prank(alice);
-        vm.expectRevert(
-            abi.encodeWithSelector(IStakingV1.MigratorNotFound.selector, migrator)
-        );
-        staking.setMigrationPermit(migrator, false);  // REVERTS — stuck at true
-
-        assertTrue(staking.migrationPermits(migrator, alice));
+        // User can revoke migration permit even after migrator role is revoked.
+        staking.setMigrationPermit(migrator, false);
+        assertFalse(staking.migrationPermits(migrator, alice));
         assertEq(staking.getUserStakes(alice).length, 1);
 
         vm.prank(admin);
         staking.grantRole(keccak256("MIGRATOR"), migrator);
 
         vm.prank(migrator);
+        vm.expectRevert(
+            abi.encodeWithSelector(IStakingV1.MigratorNotPermitted.selector, migrator, alice)
+        );
         staking.migratePositionsFrom(alice);
 
-        assertEq(staking.getUserStakes(alice).length, 0);
+        assertEq(staking.getUserStakes(alice).length, 1);
     }
 
     // Helpers
